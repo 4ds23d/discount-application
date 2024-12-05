@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="001-create-discount-entity" author="barkas">
+        <createTable tableName="discount_entity">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_id" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="config_value" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002-add-index" author="barkas">
+        <sql>
+            CREATE INDEX idx_discount_entity_product_id
+            ON discount_entity USING HASH (product_id);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

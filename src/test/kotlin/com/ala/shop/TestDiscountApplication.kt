@@ -1,4 +1,4 @@
-package com.ala.shop.discount
+package com.ala.shop
 
 import org.springframework.boot.fromApplication
 import org.springframework.boot.with

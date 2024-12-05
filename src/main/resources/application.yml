@@ -1,0 +1,16 @@
+spring:
+  application.name: discount
+  datasource:
+    url: jdbc:postgresql://localhost:5432/appdb
+    driver-class-name: org.postgresql.Driver
+    username: appuser
+    password: apppassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:db.changelog/master.xml
+    enabled: true
