@@ -6,8 +6,10 @@ This is a simple application that calculates product discounts based on configur
 
 1. Discount configuration can be improved by adding: `validFrom:time, validTo:time`. Including this information in the discount configuration can greatly improve the operational side of this domain, since the configuration can be prepared many days before the actual date.
 2. In addition, you can make a simulation by adding a parameter that will tell you on what date the discount should be counted.
-3. Adding validation to parameters
-4. Adding logs
+3. Adding security to rest full
+4. Adding validation to parameters
+5. Adding logs
+6. Improve scalability and resilience by adding cache, rate limiting
 
 # Run application
 
