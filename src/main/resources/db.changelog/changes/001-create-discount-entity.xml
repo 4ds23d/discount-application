@@ -25,4 +25,11 @@
             ON discount_entity USING HASH (product_id);
         </sql>
     </changeSet>
+
+    <changeSet id="003-add-sequence" author="barkas">
+        <createSequence
+                sequenceName="discount_entity_seq"
+                startValue="100"
+                incrementBy="50"/>
+    </changeSet>
 </databaseChangeLog>
