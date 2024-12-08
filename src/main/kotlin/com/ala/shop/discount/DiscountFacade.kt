@@ -10,7 +10,7 @@ class DiscountFacade(
     private val discountResolver: DiscountResolver
 ) {
     fun computeDiscountAmount(product: Product, orderAmount: Amount): Money {
-        return calculator.computeDiscountAmount(product, orderAmount)
+        return calculator.computeDiscount(product, orderAmount)
     }
 
     fun addDiscount(productId: ProductId, discount: String) {

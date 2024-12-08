@@ -9,12 +9,14 @@ class DiscountCalculator (
     private val cumulativeDiscountStrategy: CumulativeDiscountStrategy
     ) {
 
-    fun computeDiscountAmount(product: Product, orderAmount: Amount): Money {
+    fun computeDiscount(product: Product, orderAmount: Amount): Money {
         val discounts = discountResolver.findForProduct(product.productId)
 
-        val computedDiscounts = discounts.map {
-            it.compute(product.price, orderAmount)
-        }
+        val maxDiscount = product.price * orderAmount
+
+        val computedDiscounts = discounts
+            .map { it.compute(product.price, orderAmount) }
+            .filter { it <= maxDiscount }
 
         return cumulativeDiscountStrategy.pickDiscount(computedDiscounts)
     }

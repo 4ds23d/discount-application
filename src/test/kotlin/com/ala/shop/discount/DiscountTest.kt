@@ -69,6 +69,30 @@ class DiscountTest {
     }
 
     @Test
+    fun `discount cannot be greater than the product price`() {
+        // given
+        discountFacade.addDiscount(product.productId, PercentageDiscount(Percentage.create("101")))
+
+        // when
+        val discount = discountFacade.computeDiscountAmount(product, Amount(1))
+
+        // then
+        assertThat(discount).isEqualTo(Money.zero())
+    }
+
+    @Test
+    fun `discount can be applied up to 100 percentage of product price`() {
+        // given
+        discountFacade.addDiscount(product.productId, PercentageDiscount(Percentage.create("100")))
+
+        // when
+        val discount = discountFacade.computeDiscountAmount(product, Amount(1))
+
+        // then
+        assertThat(discount).isEqualTo(Money.create("100"))
+    }
+
+    @Test
     fun `no configuration for product`() {
         // when
         val discount = discountFacade.computeDiscountAmount(product, Amount(2))
