@@ -4,6 +4,7 @@ import com.ala.shop.config.ConvertersConfiguration
 import com.ala.shop.config.ObjectMapperConfiguration
 import com.ala.shop.core.Amount
 import com.ala.shop.core.Money
+import com.ala.shop.core.Percentage
 import com.ala.shop.core.ProductId
 import com.ala.shop.product.Product
 import com.ala.shop.product.ProductService
@@ -57,17 +58,32 @@ class DiscountControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
     @Test
-    fun registerDiscount() {
+    fun registerPercentageDiscount() {
         // when
         mockMvc.perform(
-            post("/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5")
+            post("/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5/percentage")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"@type\":\"PercentageV1\",\"percentage\":{\"value\":5}}")
+                .content("""{"amount":"5"}""")
         )
             .andExpect(status().isAccepted)
 
         // then
         val productId = ProductId.from("67fe40ed-abb4-454f-95f6-95ba6168fda5")
-        Mockito.verify(discountFacade, Mockito.times(1)).addDiscount(productId, "{\"@type\":\"PercentageV1\",\"percentage\":{\"value\":5}}")
+        Mockito.verify(discountFacade, Mockito.times(1)).addDiscount(productId, PercentageDiscount(Percentage.create("5")))
+    }
+
+    @Test
+    fun registerQuantityBasedDiscount() {
+        // when
+        mockMvc.perform(
+            post("/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5/quantity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""[{"from":0, "to": 15, "percentage": "10"}]""")
+        )
+            .andExpect(status().isAccepted)
+
+        // then
+        val productId = ProductId.from("67fe40ed-abb4-454f-95f6-95ba6168fda5")
+        Mockito.verify(discountFacade, Mockito.times(1)).addDiscount(productId, QuantityBasedDiscount(listOf(Configuration(0, 15, Percentage.create("10")))))
     }
 }

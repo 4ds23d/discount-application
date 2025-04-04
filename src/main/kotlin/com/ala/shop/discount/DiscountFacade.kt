@@ -13,10 +13,6 @@ class DiscountFacade(
         return calculator.computeDiscount(product, orderAmount)
     }
 
-    fun addDiscount(productId: ProductId, discount: String) {
-        discountResolver.addDiscount(productId, discount)
-    }
-
     fun addDiscount(productId: ProductId, discount: Discount) {
         discountResolver.addDiscount(productId, discount)
     }

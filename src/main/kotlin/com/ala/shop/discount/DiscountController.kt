@@ -1,6 +1,7 @@
 package com.ala.shop.discount
 
 import com.ala.shop.core.Amount
+import com.ala.shop.core.Percentage
 import com.ala.shop.core.ProductId
 import com.ala.shop.product.ProductService
 import org.slf4j.Logger
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/api/v1/discount")
@@ -34,12 +36,24 @@ class DiscountController(
             .orElse(ResponseEntity.notFound().build())
     }
 
-    @PostMapping("{productId}")
-    fun addDiscount(@PathVariable productId: ProductId, @RequestBody config: String): ResponseEntity<Void> {
-        logger.info("Add discount configuration: {} for product {}", config, productId)
-        discountFacade.addDiscount(productId, config)
+    @PostMapping("{productId}/percentage")
+    fun addDiscountPercentage(@PathVariable productId: ProductId, @RequestBody request: PercentageDiscountRequest): ResponseEntity<Void> {
+        logger.info("Add discount percentage configuration: {} for product {}", request, productId)
+        val discount = PercentageDiscount(Percentage.create(request.amount))
+
+        discountFacade.addDiscount(productId, discount)
+        return ResponseEntity.accepted().build()
+    }
+
+    @PostMapping("{productId}/quantity")
+    fun addDiscountQuantityBased(@PathVariable productId: ProductId, @RequestBody request: List<QuantityBasedDiscountRequest>): ResponseEntity<Void> {
+        logger.info("Add percentage discount configuration: {} for product {}", request, productId)
+        val discount = QuantityBasedDiscount(configuration = request.map { Configuration(it.from, it.to, Percentage.create(it.percentage)) })
+        discountFacade.addDiscount(productId, discount)
         return ResponseEntity.accepted().build()
     }
 }
 
 data class DiscountPrice(val productId: ProductId, val amount: Amount, val discount: String)
+data class PercentageDiscountRequest(val amount: String)
+data class QuantityBasedDiscountRequest(val from: Int, val to: Int, val percentage: String)

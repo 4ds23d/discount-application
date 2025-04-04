@@ -64,8 +64,8 @@ curl http://localhost:8080/api/v1/products/67fe40ed-abb4-454f-95f6-95ba6168fda5/
 ```bash
 curl --header "Content-Type: application/json" \
 --request POST \
---data '{"@type":"PercentageV1","percentage":{"value":5}}' \
-http://localhost:8080/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5
+--data '{"amount":"5"}' \
+http://localhost:8080/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5/percentage
 ```
 
 ## Register quantity based discount
@@ -73,8 +73,8 @@ http://localhost:8080/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5
 ```bash
 curl --header "Content-Type: application/json" \
 --request POST \
---data '{"@type":"QuantityBasedDiscountV1","configuration":[{"from":0,"to":9,"percentage":{"value":0}},{"from":10,"to":19,"percentage":{"value":5}},{"from":20,"to":49,"percentage":{"value":10}},{"from":50,"to":null,"percentage":{"value":15}}]}' \
-http://localhost:8080/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5
+--data '[{"from":0, "to":9,"percentage":"0"},{"from":10,"to":19,"percentage":"5"},{"from":20,"to":49,"percentage":"10"},{"from":50,"to":null,"percentage":"15"}]' \
+http://localhost:8080/api/v1/discount/67fe40ed-abb4-454f-95f6-95ba6168fda5/quantity
 ```
 
 ## Compute discount for product
